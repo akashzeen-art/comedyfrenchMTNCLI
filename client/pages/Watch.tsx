@@ -1,13 +1,22 @@
-import { useRef, useEffect } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useRef, useEffect, useState } from "react";
+import { useParams, Link, useNavigate, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
+import { Loader2, Play, X } from "lucide-react";
 import { videos } from "@/data/videos";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
-import { Play, X } from "lucide-react";
+import VideoAccessButton from "@/components/VideoAccessButton";
+import { useSubscription } from "@/context/SubscriptionContext";
+import {
+  checkSubscriptionStatus,
+  redirectToCampaign,
+  isActive,
+} from "@/services/vasApi";
+import { getMsisdn, parseUrlParams, getSubid, getProductCode } from "@/lib/subscriber";
 
 export default function Watch() {
   const { id } = useParams<{ id: string }>();
+  const [searchParams] = useSearchParams();
   const video = videos.find((v) => v.id === id);
   const relatedVideos = videos
     .filter((v) => v.id !== id && v.category === video?.category)
@@ -15,10 +24,54 @@ export default function Watch() {
 
   const navigate = useNavigate();
   const videoRef = useRef<HTMLVideoElement>(null);
+  const { requestPlay } = useSubscription();
+  const [verifying, setVerifying] = useState(true);
+  const [allowed, setAllowed] = useState(false);
+
+  const subid = getSubid();
+  const productcode = getProductCode();
 
   useEffect(() => {
-    videoRef.current?.play();
-  }, [id]);
+    parseUrlParams(searchParams.toString() ? `?${searchParams.toString()}` : "");
+  }, [searchParams]);
+
+  useEffect(() => {
+    if (!video) return;
+
+    let cancelled = false;
+
+    const verify = async () => {
+      const msisdn = getMsisdn();
+      if (!msisdn) {
+        requestPlay(video);
+        navigate("/", { replace: true });
+        return;
+      }
+
+      setVerifying(true);
+      try {
+        const data = await checkSubscriptionStatus(subid, productcode, msisdn);
+        if (cancelled) return;
+        if (isActive(data.status)) {
+          setAllowed(true);
+          setVerifying(false);
+        } else {
+          redirectToCampaign(subid, productcode);
+        }
+      } catch {
+        if (!cancelled) redirectToCampaign(subid, productcode);
+      }
+    };
+
+    verify();
+    return () => {
+      cancelled = true;
+    };
+  }, [id, video, subid, productcode, requestPlay, navigate]);
+
+  useEffect(() => {
+    if (allowed) videoRef.current?.play();
+  }, [id, allowed]);
 
   if (!video) {
     return (
@@ -37,6 +90,17 @@ export default function Watch() {
     );
   }
 
+  if (verifying || !allowed) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4 text-gray-600">
+          <Loader2 className="h-10 w-10 animate-spin text-pink-500" />
+          <p className="font-semibold">Vérification de l'abonnement...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -47,7 +111,6 @@ export default function Watch() {
       <Navigation />
 
       <div className="pt-32 pb-12">
-        {/* Video Player Section */}
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
@@ -67,7 +130,6 @@ export default function Watch() {
             >
               Your browser does not support the video tag.
             </video>
-            {/* Back Button */}
             <button
               onClick={() => navigate(-1)}
               className="absolute top-4 left-4 z-10 w-10 h-10 bg-black/60 hover:bg-black/80 backdrop-blur rounded-full flex items-center justify-center text-white transition-all"
@@ -76,7 +138,6 @@ export default function Watch() {
             </button>
           </motion.div>
 
-          {/* Video Info */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -92,7 +153,6 @@ export default function Watch() {
           </motion.div>
         </div>
 
-        {/* Related Videos */}
         {relatedVideos.length > 0 && (
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 border-t border-gray-200">
             <motion.h2
@@ -113,11 +173,11 @@ export default function Watch() {
                   viewport={{ once: true }}
                   transition={{ delay: idx * 0.1 }}
                 >
-                  <Link to={`/watch/${relatedVideo.id}`}>
+                  <VideoAccessButton video={relatedVideo} className="cursor-pointer">
                     <motion.div
                       whileHover={{ scale: 1.05 }}
                       transition={{ duration: 0.3 }}
-                      className="group relative rounded-2xl overflow-hidden cursor-pointer"
+                      className="group relative rounded-2xl overflow-hidden"
                     >
                       <img
                         src={relatedVideo.thumbnail}
@@ -141,7 +201,7 @@ export default function Watch() {
                       <h3 className="font-bold text-gray-900 line-clamp-2">{relatedVideo.title}</h3>
                       <p className="text-sm text-gray-600 mt-1">{relatedVideo.comedian}</p>
                     </div>
-                  </Link>
+                  </VideoAccessButton>
                 </motion.div>
               ))}
             </div>

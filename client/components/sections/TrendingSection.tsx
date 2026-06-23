@@ -7,6 +7,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Link } from "react-router-dom";
 import { Play, Clock } from "lucide-react";
 import { Video } from "@/data/videos";
+import VideoAccessButton from "@/components/VideoAccessButton";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
@@ -99,7 +100,7 @@ export default function TrendingSection({ videos }: TrendingSectionProps) {
           {videos.map((video) => (
             <SwiperSlide key={video.id}>
               <motion.div className="trending-card h-full">
-                <Link to={`/watch/${video.id}`}>
+                <VideoAccessButton video={video} className="cursor-pointer">
                   <motion.div
                     whileHover={{ scale: 1.05, y: -10 }}
                     transition={{ duration: 0.3 }}
@@ -150,15 +151,15 @@ export default function TrendingSection({ videos }: TrendingSectionProps) {
                     {/* Glow Effect */}
                     <div className="absolute inset-0 bg-gradient-to-r from-pink-500/0 via-pink-500/0 to-cyan-500/0 group-hover:from-pink-500/20 group-hover:to-cyan-500/20 rounded-2xl transition-all duration-300" />
                   </motion.div>
-                </Link>
+                </VideoAccessButton>
 
                 {/* Card Info */}
                 <div className="mt-4 space-y-2">
-                  <Link to={`/watch/${video.id}`}>
+                  <VideoAccessButton video={video} className="cursor-pointer">
                     <h3 className="text-lg font-bold text-white group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-pink-400 group-hover:to-cyan-400 group-hover:bg-clip-text transition-all line-clamp-2">
                       {video.title}
                     </h3>
-                  </Link>
+                  </VideoAccessButton>
                   <p className="text-sm text-gray-400">{video.comedian}</p>
 
                 </div>

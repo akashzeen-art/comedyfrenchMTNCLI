@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Play, Zap } from "lucide-react";
 import { videos } from "@/data/videos";
+import { useSubscription } from "@/context/SubscriptionContext";
 
 interface HeroSectionProps {
   scrollY: number;
@@ -24,6 +25,7 @@ export default function HeroSection({ scrollY }: HeroSectionProps) {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const featuredVideos = useMemo(() => shuffle(videos.filter((v) => FEATURED_IDS.includes(v.id))).slice(0, 6), []);
   const active = featuredVideos[activeIdx];
+  const { requestPlay, accountQuery } = useSubscription();
 
   useEffect(() => {
     intervalRef.current = setInterval(() => {
@@ -119,20 +121,19 @@ export default function HeroSection({ scrollY }: HeroSectionProps) {
               transition={{ delay: 0.4, duration: 0.7 }}
               className="flex flex-wrap gap-4"
             >
-              <Link to={`/watch/${active.id}`}>
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="px-8 py-4 bg-gradient-to-r from-orange-500 to-pink-500 text-white font-bold rounded-full flex items-center gap-3 shadow-2xl shadow-orange-500/30 hover:shadow-orange-500/50 transition-shadow"
-                >
-                  <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-                    <Play className="w-4 h-4 ml-0.5" fill="white" />
-                  </div>
-                  Regarder Maintenant
-                </motion.button>
-              </Link>
+              <motion.button
+                onClick={() => requestPlay(active)}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-8 py-4 bg-gradient-to-r from-orange-500 to-pink-500 text-white font-bold rounded-full flex items-center gap-3 shadow-2xl shadow-orange-500/30 hover:shadow-orange-500/50 transition-shadow"
+              >
+                <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                  <Play className="w-4 h-4 ml-0.5" fill="white" />
+                </div>
+                Regarder Maintenant
+              </motion.button>
 
-              <Link to="/categories">
+              <Link to={`/categories${accountQuery}`}>
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}

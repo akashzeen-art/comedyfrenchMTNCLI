@@ -8,6 +8,12 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 8080,
+    proxy: {
+      "/adpoke": {
+        target: "http://68.183.88.91",
+        changeOrigin: true,
+      },
+    },
     fs: {
       allow: ["./client", "./shared", "index.html", "./node_modules"],
       deny: [".env", ".env.*", "*.{crt,pem}", "**/.git/**", "server/**"],

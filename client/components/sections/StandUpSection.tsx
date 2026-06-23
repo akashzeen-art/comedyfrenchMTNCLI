@@ -2,9 +2,9 @@ import { useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Link } from "react-router-dom";
 import { Play, Star } from "lucide-react";
 import { Video } from "@/data/videos";
+import VideoAccessButton from "@/components/VideoAccessButton";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -104,7 +104,7 @@ export default function StandUpSection({ videos }: StandUpSectionProps) {
             transition={{ duration: 0.8 }}
             className="lg:col-span-2"
           >
-            <Link to={`/watch/${featuredVideo.id}`}>
+            <VideoAccessButton video={featuredVideo} className="cursor-pointer">
               <motion.div
                 whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.3 }}
@@ -169,7 +169,7 @@ export default function StandUpSection({ videos }: StandUpSectionProps) {
                 {/* Neon Glow Effect */}
                 <div className="absolute inset-0 bg-gradient-to-r from-purple-500/0 via-purple-500/0 to-cyan-500/0 group-hover:from-purple-500/20 group-hover:to-cyan-500/20 rounded-3xl transition-all duration-300" />
               </motion.div>
-            </Link>
+            </VideoAccessButton>
           </motion.div>
 
           {/* Side Cards */}
@@ -182,7 +182,7 @@ export default function StandUpSection({ videos }: StandUpSectionProps) {
                 viewport={{ once: true }}
                 transition={{ duration: 0.8, delay: idx * 0.1 }}
               >
-                <Link to={`/watch/${video.id}`}>
+                <VideoAccessButton video={video} className="cursor-pointer">
                   <motion.div
                     whileHover={{ scale: 1.05, x: 10 }}
                     transition={{ duration: 0.3 }}
@@ -225,7 +225,7 @@ export default function StandUpSection({ videos }: StandUpSectionProps) {
                       <Play className="w-5 h-5 ml-0.5" fill="currentColor" />
                     </motion.div>
                   </motion.div>
-                </Link>
+                </VideoAccessButton>
               </motion.div>
             ))}
           </div>

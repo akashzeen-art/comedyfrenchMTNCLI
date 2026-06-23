@@ -2,11 +2,13 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
+import { useSubscription } from "@/context/SubscriptionContext";
 
 export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const { accountQuery } = useSubscription();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -30,8 +32,9 @@ export default function Navigation() {
   }, [location.pathname, location.hash]);
 
   const navLinks = [
-    { label: "Accueil", href: "/" },
-    { label: "Catégories", href: "/categories" },
+    { label: "Accueil", href: `/${accountQuery}` },
+    { label: "Catégories", href: `/categories${accountQuery}` },
+    { label: "Mon Compte", href: `/account${accountQuery}` },
   ];
 
   return (

@@ -2,9 +2,9 @@ import { useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Link } from "react-router-dom";
 import { Play } from "lucide-react";
 import { Video } from "@/data/videos";
+import VideoAccessButton from "@/components/VideoAccessButton";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -68,19 +68,19 @@ export default function MemeShortsSection({ videos }: MemeShortsProps) {
           </p>
         </motion.div>
 
-        {/* Masonry Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 auto-rows-[280px]">
+        {/* Landscape Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {videos.map((video, idx) => (
             <motion.div
               key={video.id}
-              className="meme-card group relative h-full"
-              whileHover={{ y: -15 }}
+              className="meme-card group"
+              whileHover={{ y: -8 }}
               transition={{ duration: 0.3 }}
             >
-              <Link to={`/watch/${video.id}`}>
+              <VideoAccessButton video={video} className="cursor-pointer block w-full">
                 <motion.div
-                  className="relative w-full h-full rounded-2xl overflow-hidden cursor-pointer"
-                  whileHover={{ rotate: 3 }}
+                  className="relative w-full aspect-video rounded-2xl overflow-hidden cursor-pointer"
+                  whileHover={{ rotate: 1 }}
                   transition={{ duration: 0.3 }}
                 >
                   {/* Gradient Border */}
@@ -144,7 +144,7 @@ export default function MemeShortsSection({ videos }: MemeShortsProps) {
                     {emojis[(idx + 1) % emojis.length]}
                   </motion.div>
                 </motion.div>
-              </Link>
+              </VideoAccessButton>
             </motion.div>
           ))}
         </div>

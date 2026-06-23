@@ -2,9 +2,9 @@ import { useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Link } from "react-router-dom";
 import { Heart, MessageCircle, Share2, Play } from "lucide-react";
 import { Video } from "@/data/videos";
+import VideoAccessButton from "@/components/VideoAccessButton";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -51,12 +51,12 @@ export default function ReelsSection({ videos }: ReelsSectionProps) {
             </span>
           </h2>
           <p className="text-xl text-gray-600 max-w-xl mx-auto">
-            Du fun vertical rapide fait pour faire défiler, rejouer et partager instantanément.
+            Du fun rapide fait pour faire défiler, rejouer et partager instantanément.
           </p>
         </motion.div>
 
-        {/* Vertical Reels Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 auto-rows-[400px]">
+        {/* Landscape Swiper Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {videos.map((video, idx) => (
             <motion.div
               key={video.id}
@@ -64,13 +64,13 @@ export default function ReelsSection({ videos }: ReelsSectionProps) {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: idx * 0.05 }}
-              className="group relative h-full"
+              className="group"
             >
-              <Link to={`/watch/${video.id}`}>
+              <VideoAccessButton video={video} className="cursor-pointer block w-full">
                 <motion.div
-                  whileHover={{ y: -8 }}
+                  whileHover={{ y: -6 }}
                   transition={{ duration: 0.3 }}
-                  className="relative w-full h-full rounded-3xl overflow-hidden"
+                  className="relative w-full aspect-video rounded-3xl overflow-hidden"
                 >
                   {/* Modern Shadow */}
                   <div className="absolute inset-0 shadow-2xl rounded-3xl group-hover:shadow-2xl group-hover:shadow-purple-300/50 transition-shadow duration-300" />
@@ -169,7 +169,7 @@ export default function ReelsSection({ videos }: ReelsSectionProps) {
                     />
                   ))}
                 </motion.div>
-              </Link>
+              </VideoAccessButton>
             </motion.div>
           ))}
         </div>

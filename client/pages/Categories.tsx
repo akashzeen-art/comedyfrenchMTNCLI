@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { videos } from "@/data/videos";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import VideoAccessButton from "@/components/VideoAccessButton";
 import { Play, Eye, Clock, ArrowLeft } from "lucide-react";
 
 const ALL_CATEGORIES = [
@@ -99,7 +100,7 @@ function CategoryList() {
               transition={{ delay: idx * 0.03 }}
               whileHover={{ y: -6 }}
             >
-              <Link to={`/watch/${video.id}`}>
+              <VideoAccessButton video={video} className="cursor-pointer">
                 <div className="group rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow">
                   <div className="relative aspect-video overflow-hidden">
                     <img
@@ -121,7 +122,7 @@ function CategoryList() {
                     <p className="text-sm text-gray-500">{video.comedian}</p>
                   </div>
                 </div>
-              </Link>
+              </VideoAccessButton>
             </motion.div>
           ))}
         </div>
@@ -182,7 +183,7 @@ function CategoryVideos() {
                 transition={{ delay: idx * 0.05 }}
                 whileHover={{ y: -6 }}
               >
-                <Link to={`/watch/${video.id}`}>
+                <VideoAccessButton video={video} className="cursor-pointer">
                   <div className="group rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow">
                     <div className="relative aspect-video overflow-hidden">
                       <img
@@ -207,7 +208,7 @@ function CategoryVideos() {
                       </div>
                     </div>
                   </div>
-                </Link>
+                </VideoAccessButton>
               </motion.div>
             ))}
           </div>
