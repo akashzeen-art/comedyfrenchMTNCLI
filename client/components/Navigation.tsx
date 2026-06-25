@@ -51,16 +51,13 @@ export default function Navigation() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 group">
-            <motion.div
-              whileHover={{ scale: 1.1, rotate: 5 }}
-              className="text-3xl font-black bg-gradient-to-r from-orange-500 via-pink-500 to-purple-600 bg-clip-text text-transparent"
-            >
-              🎭
-            </motion.div>
-            <span className="hidden sm:inline font-black text-xl bg-gradient-to-r from-orange-500 via-pink-500 to-purple-600 bg-clip-text text-transparent">
-              ComedyHub
-            </span>
+          <Link to="/" className="flex items-center group">
+            <motion.img
+              whileHover={{ scale: 1.05 }}
+              src="/comedylogo.png"
+              alt="Comedy Logo"
+              className="h-12 w-auto object-contain"
+            />
           </Link>
 
           {/* Desktop Navigation */}

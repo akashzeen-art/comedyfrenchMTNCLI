@@ -36,7 +36,7 @@ export default function MyAccount() {
         validFrom: data.valid_from || data.validityfrom || "—",
         validTo: data.valid_to || data.validityto || "—",
         status: String(data.status),
-        serviceName: data.service_name || "ComedyHub",
+        serviceName: data.service_name || "Comedyzone",
       });
     } catch {
       setError("Impossible de charger les détails du compte.");
@@ -87,7 +87,7 @@ export default function MyAccount() {
             Mon Compte
           </h1>
           <p className="text-gray-500">
-            Gérez votre abonnement ComedyHub
+            Gérez votre abonnement Comedyzone
           </p>
         </motion.div>
 

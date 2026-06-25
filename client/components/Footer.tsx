@@ -24,10 +24,11 @@ export default function Footer() {
               transition={{ duration: 0.6, delay: 0 }}
             >
               <Link to="/" className="flex items-center gap-2 mb-4">
-                <span className="text-3xl">🎭</span>
-                <span className="font-black text-xl bg-gradient-to-r from-orange-400 to-pink-500 bg-clip-text text-transparent">
-                  ComedyHub
-                </span>
+                <img
+                  src="/comedylogo.png"
+                  alt="Comedyzone logo"
+                  className="h-10 w-auto object-contain"
+                />
               </Link>
               <p className="text-gray-400 text-sm leading-relaxed">
                 Votre destination ultime pour le streaming de comédie premium. Riez sans limite avec les meilleurs comédiens du monde.
@@ -47,7 +48,7 @@ export default function Footer() {
             className="pt-8 flex flex-col sm:flex-row justify-between items-center gap-4"
           >
             <p className="text-gray-500 text-sm">
-              © {currentYear} ComedyHub. Tous droits réservés. Créé avec{" "}
+              © {currentYear} Comedyzone. Tous droits réservés. Créé avec{" "}
               <span className="text-pink-500">💝</span> pour les amateurs de comédie.
             </p>
 

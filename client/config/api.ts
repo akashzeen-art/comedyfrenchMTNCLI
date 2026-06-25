@@ -1,4 +1,4 @@
-/** NRCZ (ComedyHub) VAS API configuration */
+/** NRCZ (Comedyzone) VAS API configuration */
 export const API_BASE = import.meta.env.VITE_API_BASE ?? "http://68.183.88.91";
 
 export const PRODUCT_CODE = import.meta.env.VITE_PRODUCT_CODE ?? "NRCZ";
